@@ -4,6 +4,13 @@ export function Gameboard() {
   return {
     ships: [],
     missedHits: [],
+    areAllShipsSunk() {
+      const statusOfShips = [];
+      this.ships.forEach((ship) => {
+        statusOfShips.push(ship.isSunk());
+      });
+      return statusOfShips.every((status) => status === true);
+    },
     placeShip(length, team, type, coordinates, axis) {
       this.ships.push(new Ship(length, team, type, coordinates, axis));
     },
@@ -44,6 +51,3 @@ export function Gameboard() {
     },
   };
 }
-
-/* Gameboards should have a receiveAttack function that takes a pair of coordinates, determines whether or not the attack hit a
- ship and then sends the ‘hit’ function to the correct ship, or records the coordinates of the missed shot. */

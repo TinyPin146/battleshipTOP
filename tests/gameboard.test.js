@@ -30,4 +30,17 @@ describe('Tests gameboard function', () => {
     gameboard.receiveAttack([6, 6]);
     expect(gameboard.missedHits[0]).toEqual([6, 6]);
   });
+
+  it('Can check if all ships have been lost', () => {
+    expect(gameboard.areAllShipsSunk).toBeDefined();
+
+    gameboard.placeShip(5, 'Player', 'Carrier', [5, 5], 'X');
+
+    let areAllShipsSunkResponse = gameboard.areAllShipsSunk();
+    expect(areAllShipsSunkResponse).toBe(false);
+
+    gameboard.ships[0].numberOfHits = 5;
+    areAllShipsSunkResponse = gameboard.areAllShipsSunk();
+    expect(areAllShipsSunkResponse).toBe(true);
+  });
 });
