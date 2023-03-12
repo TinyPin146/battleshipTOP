@@ -3,6 +3,7 @@ import { Ship } from './ships.js';
 export function Gameboard() {
   return {
     ships: [],
+    missedHits: [],
     placeShip(length, team, type, coordinates, axis) {
       this.ships.push(new Ship(length, team, type, coordinates, axis));
     },
@@ -21,6 +22,7 @@ export function Gameboard() {
           }
         }
       });
+      if (!isHit) this.missedHits.push(attackCoords);
       return isHit;
     },
     getShipCoords(ship) {

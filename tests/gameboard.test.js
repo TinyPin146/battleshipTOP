@@ -10,16 +10,24 @@ describe('Tests gameboard function', () => {
     expect(gameboard).toBeDefined();
     expect(gameboard).toHaveProperty('ships');
   });
+
   it('Creates a ship at given coords', () => {
     gameboard.placeShip(5, 'Player', 'Carrier', [5, 5], 'X');
     expect(gameboard.ships).toHaveLength(1);
     expect(gameboard.ships[0]).toHaveProperty('startCoordinates');
   });
+
   it('Decides if a ship was hit', () => {
     gameboard.placeShip(5, 'Player', 'Carrier', [5, 5], 'X');
     const attackResponse = gameboard.receiveAttack([5, 5]);
     expect(attackResponse).toBeDefined();
     expect(attackResponse).toBe(true);
     expect(gameboard.ships[0].numberOfHits).toBe(1);
+  });
+
+  it('Creates an array of missed attacks', () => {
+    expect(gameboard.missedHits).toBeDefined();
+    gameboard.receiveAttack([6, 6]);
+    expect(gameboard.missedHits[0]).toEqual([6, 6]);
   });
 });
