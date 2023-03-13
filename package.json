@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
+    "test": "jest --verbose",
     "watch-jest": "jest --watchAll --verbose",
     "build": "webpack",
     "watch-webpack": "webpack watch"
