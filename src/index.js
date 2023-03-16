@@ -1,9 +1,31 @@
-import { Player } from './player.js';
-import { Gameboard } from './gameboard.js';
-import { Ship } from './ships.js';
+import { setUpPlayers } from './gameLoop.js';
 
-const Player1 = new Player('Martin');
-const Player2 = new Player('AI', true);
+const player1NameInput = document.querySelector('#player1');
+const player2NameInput = document.querySelector('#player2');
+const startGameWithAIBtn = document.querySelector('.start-game-AI-btn');
+const startGameWithPlayerBtn = document.querySelector('.start-game-player-btn');
 
-Player1.gameboard.placeShip(5, 'Player', 'Carrier', [5, 5], 'X');
-Player1.gameboard.placeShip(5, 'Player', 'Carrier', [2, 2], 'Y');
+export function addGameboardToDOMForPlayer(gameboard) {
+  document.querySelector('main').insertAdjacentElement('beforeend', gameboard);
+}
+
+export function addEventlistenersToPlayerGameboard(player) {
+  document
+    .querySelectorAll(`.gameboard-element-${player}`)
+    .forEach((element) => {
+      element.addEventListener('click', (e) => {
+        console.log([
+          Number(e.currentTarget.dataset.xCoord),
+          Number(e.currentTarget.dataset.yCoord),
+        ]);
+      });
+    });
+}
+
+export function addHiddenClassToElement(element) {
+  element.classList.add('hidden');
+}
+
+startGameWithAIBtn.addEventListener('click', () => {
+  setUpPlayers(player1NameInput.value, player2NameInput.value, true);
+});

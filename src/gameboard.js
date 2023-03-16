@@ -51,5 +51,32 @@ export function Gameboard() {
       }
       return shipCoords;
     },
+    createGameboardHTML(name, height = 10, width = 10) {
+      const gameboardParent = document.createElement('div');
+      gameboardParent.classList.add(
+        `gameboard-parent-${name}`,
+        'gameboard-parent'
+      );
+
+      for (let i = 10; i >= height - (height - 1); i -= 1) {
+        for (let j = 1; j <= width; j += 1) {
+          const gameboardElement = document.createElement('div');
+          gameboardElement.classList.add(
+            'gameboard-element',
+            `gameboard-element-${name}`
+          );
+          gameboardElement.setAttribute('data-X-coord', i);
+          gameboardElement.setAttribute('data-Y-coord', j);
+          if (i === 1) {
+            gameboardElement.classList.add('gameboard-element-bottom-row');
+          }
+          if (j === 10) {
+            gameboardElement.classList.add('gameboard-element-right-row');
+          }
+          gameboardParent.insertAdjacentElement('beforeend', gameboardElement);
+        }
+      }
+      return gameboardParent;
+    },
   };
 }

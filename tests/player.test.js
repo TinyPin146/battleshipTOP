@@ -41,7 +41,6 @@ describe('Player tests', () => {
     Player1.gameboard.placeShip(5, 'Player1', 'Carrier', [5, 5], 'X');
     Player2.attackEnemy([5, 5], Player1);
     const compShot = Player2.computerShot(Player1);
-    const compShot2 = Player2.computerShot(Player1);
 
     expect(compShot).toHaveLength(2);
   });
@@ -88,8 +87,8 @@ describe('Player tests', () => {
 
 function createShots(player) {
   const shots = [];
-  for (let i = 1; i <= 10; i++) {
-    for (let j = 1; j <= 9; j++) {
+  for (let i = 1; i <= 10; i += 1) {
+    for (let j = 1; j <= 9; j += 1) {
       shots.push([i, j]);
     }
   }

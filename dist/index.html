@@ -5,10 +5,33 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Battleship - TOP</title>
+    <link rel="stylesheet" href="./style.reset.css">
     <link rel="stylesheet" href="./style.css">
     <script src="./main.js" defer type="module"></script>
 </head>
 <body>
 
+    <header class="center">
+        <h1>BATTLESHIP</h1>
+    </header>
+
+    <main class="center">
+        <div class="gamestart-form">
+            <div class="playerinput">
+                <label for="player1">Player 1 name:</label>
+                <input type="text" name="player1" id="player1">
+            </div>
+            <div class="playerinput">
+                <label for="player2">Player 2 name:</label>
+                <input type="text" name="player2" id="player2">
+            </div>
+            <h3>Start game</h3>
+            <div class="gamestart-buttons center">
+                <button class="start-game-AI-btn center">Play against Computer</button>
+                <button class="start-game-player-btn center">Play against Player</button>
+            </div>
+        </div>
+    </main>
+    <div class="gameboard"></div>
 </body>
 </html>
