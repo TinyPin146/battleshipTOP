@@ -21,7 +21,7 @@ describe('Tests gameboard function', () => {
     gameboard.placeShip(5, 'Player', 'Carrier', [5, 5], 'X');
     const attackResponse = gameboard.receiveAttack([5, 5]);
     expect(attackResponse).toBeDefined();
-    expect(attackResponse).toBe(true);
+    expect(attackResponse.isHit).toBe(true);
     expect(gameboard.ships[0].numberOfHits).toBe(1);
   });
 

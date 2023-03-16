@@ -16,6 +16,7 @@ export function Gameboard() {
     },
     receiveAttack(attackCoords) {
       let isHit = false;
+      let didSink = null;
       this.ships.forEach((ship) => {
         const shipCoords = this.getShipCoords(ship);
         for (let i = 0; i < shipCoords.length; i += 1) {
@@ -25,12 +26,13 @@ export function Gameboard() {
           ) {
             ship.hit();
             isHit = true;
+            didSink = ship.isSunk();
             break;
           }
         }
       });
-      if (!isHit) this.missedHits.push(attackCoords);
-      return isHit;
+      this.missedHits.push(attackCoords);
+      return { isHit, didSink };
     },
     getShipCoords(ship) {
       const shipCoords = [];
