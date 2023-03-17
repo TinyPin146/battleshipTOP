@@ -22,6 +22,28 @@ export function addEventlistenersToPlayerGameboard(player) {
     });
 }
 
+export function showShipsOnGameboard(allShipCoords) {
+  allShipCoords.forEach((shipCoords) => {
+    shipCoords.forEach((coord) => {
+      const shipElementGrid = document.querySelector(
+        `[data-x-coord="${coord[0]}"][data-y-coord="${coord[1]}"]`
+      );
+      shipElementGrid.classList.add('ship-shown');
+    });
+  });
+}
+
+export function hideShipsOnGameboard(allShipCoords) {
+  allShipCoords.forEach((shipCoords) => {
+    shipCoords.forEach((coord) => {
+      const shipElementGrid = document.querySelector(
+        `[data-x-coord="${coord[0]}"][data-y-coord="${coord[1]}"]`
+      );
+      shipElementGrid.classList.add('ship-hidden');
+    });
+  });
+}
+
 export function addHiddenClassToElement(element) {
   element.classList.add('hidden');
 }

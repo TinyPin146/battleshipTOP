@@ -34,6 +34,14 @@ export function Gameboard() {
       this.missedHits.push(attackCoords);
       return { isHit, didSink };
     },
+    getAllShipCoords() {
+      const allShipsCoords = [];
+      this.ships.forEach((ship) => {
+        const shipCoords = this.getShipCoords(ship);
+        allShipsCoords.push(shipCoords);
+      });
+      return allShipsCoords;
+    },
     getShipCoords(ship) {
       const shipCoords = [];
       for (let i = 0; i < ship.length; i += 1) {
@@ -50,6 +58,23 @@ export function Gameboard() {
         }
       }
       return shipCoords;
+    },
+    determineIfShipIsOnGameboard(length, startCoord, axis) {
+      let isShipOnBoard = true;
+      const shipCoords = [];
+      for (let i = 0; i < length; i += 1) {
+        if (axis === 'X') {
+          shipCoords.push([startCoord[0] + i, startCoord[1]]);
+        } else {
+          shipCoords.push([startCoord[0], startCoord[1] + i]);
+        }
+      }
+      shipCoords.forEach((coord) => {
+        if (coord[0] > 10 || coord[0] < 1 || coord[1] > 10 || coord[1] < 1) {
+          isShipOnBoard = false;
+        }
+      });
+      return isShipOnBoard;
     },
     createGameboardHTML(name, height = 10, width = 10) {
       const gameboardParent = document.createElement('div');

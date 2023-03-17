@@ -28,6 +28,37 @@ export function Player(name, isComputer = false) {
       return attackResponse;
     },
 
+    placeShipsRandomly() {
+      for (let i = 5; i >= 2; i -= 1) {
+        const length = i;
+        let startCoord = this.calculateRandomCoords();
+        const axis = this.calculateRandomAxis();
+
+        while (
+          !this.gameboard.determineIfShipIsOnGameboard(length, startCoord, axis)
+        ) {
+          startCoord = this.calculateRandomCoords();
+        }
+
+        switch (i) {
+          case 5:
+            console.log({ length, startCoord, axis });
+            break;
+          case 4:
+            console.log({ length, startCoord, axis });
+            break;
+          case 3:
+            console.log(3);
+            break;
+          case 2:
+            console.log(2);
+            break;
+          default:
+            console.log('shit');
+        }
+      }
+    },
+
     computerShot(enemyPlayer) {
       if (!this.isComputer) return;
       let nextShot;
@@ -185,6 +216,17 @@ export function Player(name, isComputer = false) {
         this.getRandomNumBetween1And10(),
         this.getRandomNumBetween1And10(),
       ];
+    },
+
+    calculateRandomCoords() {
+      return [
+        this.getRandomNumBetween1And10(),
+        this.getRandomNumBetween1And10(),
+      ];
+    },
+
+    calculateRandomAxis() {
+      return Math.floor(Math.random() * 2) ? 'X' : 'Y';
     },
 
     isNextShotAlreadyDone(shotCoords, enemyPlayer) {

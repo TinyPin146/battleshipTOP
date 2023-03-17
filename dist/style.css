@@ -15,6 +15,13 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    gap: 2rem;
+}
+.ship-shown {
+    background: midnightblue;
+}
+.ship-hidden {
+    background: none;
 }
 
 h1 {
