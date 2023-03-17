@@ -24,17 +24,17 @@ export function setUpPlayers(Player1, Player2, isPlayer2Computer) {
   const player1Gameboard = player1.gameboard.createGameboardHTML(player1.name);
   addGameboardToDOMForPlayer(player1Gameboard);
   addEventlistenersToPlayerGameboard(player1.name);
-  player1.gameboard.placeShip(5, player1.name, 'Carrier', [5, 5], 'X');
+  player1.placeShipsRandomly();
   showShipsOnGameboard(player1.gameboard.getAllShipCoords());
 
   const player2Gameboard = player2.gameboard.createGameboardHTML(player2.name);
   addGameboardToDOMForPlayer(player2Gameboard);
   addEventlistenersToPlayerGameboard(player2.name);
-  player2.placeShipsRandomly();
+  // player2.placeShipsRandomly();
 
   takeTurns();
 
-  console.log({ player1, player2 });
+  console.log({ player1: player1.gameboard.ships, player2 });
 }
 
 function takeTurns() {

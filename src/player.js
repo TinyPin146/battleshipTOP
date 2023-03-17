@@ -29,29 +29,71 @@ export function Player(name, isComputer = false) {
     },
 
     placeShipsRandomly() {
-      for (let i = 5; i >= 2; i -= 1) {
+      for (let i = 5; i >= 1; i -= 1) {
         const length = i;
         let startCoord = this.calculateRandomCoords();
         const axis = this.calculateRandomAxis();
 
         while (
-          !this.gameboard.determineIfShipIsOnGameboard(length, startCoord, axis)
+          !this.gameboard.determineIfShipIsOnGameboard(
+            length,
+            startCoord,
+            axis
+          ) ||
+          this.gameboard.determineIfShipIsOnAnotherShip(
+            length,
+            startCoord,
+            axis
+          )
         ) {
           startCoord = this.calculateRandomCoords();
         }
 
         switch (i) {
           case 5:
-            console.log({ length, startCoord, axis });
+            this.gameboard.placeShip(
+              length,
+              this.name,
+              'Carrier',
+              startCoord,
+              axis
+            );
             break;
           case 4:
-            console.log({ length, startCoord, axis });
+            this.gameboard.placeShip(
+              length,
+              this.name,
+              'Battleship',
+              startCoord,
+              axis
+            );
             break;
           case 3:
-            console.log(3);
+            this.gameboard.placeShip(
+              length,
+              this.name,
+              'Cruiser',
+              startCoord,
+              axis
+            );
             break;
           case 2:
-            console.log(2);
+            this.gameboard.placeShip(
+              length + 1,
+              this.name,
+              'Submarine',
+              startCoord,
+              axis
+            );
+            break;
+          case 1:
+            this.gameboard.placeShip(
+              length + 1,
+              this.name,
+              'Destroyer',
+              startCoord,
+              axis
+            );
             break;
           default:
             console.log('shit');

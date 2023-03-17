@@ -61,20 +61,45 @@ export function Gameboard() {
     },
     determineIfShipIsOnGameboard(length, startCoord, axis) {
       let isShipOnBoard = true;
-      const shipCoords = [];
-      for (let i = 0; i < length; i += 1) {
-        if (axis === 'X') {
-          shipCoords.push([startCoord[0] + i, startCoord[1]]);
-        } else {
-          shipCoords.push([startCoord[0], startCoord[1] + i]);
-        }
-      }
+      const shipCoords = this.getAShipsCoordinates(length, startCoord, axis);
       shipCoords.forEach((coord) => {
         if (coord[0] > 10 || coord[0] < 1 || coord[1] > 10 || coord[1] < 1) {
           isShipOnBoard = false;
         }
       });
       return isShipOnBoard;
+    },
+    determineIfShipIsOnAnotherShip(length, startCoord, axis) {
+      let isShipOnAnotherShip = false;
+      const shipCoords = this.getAShipsCoordinates(length, startCoord, axis);
+      const createdShipCoords = this.getAllShipCoords().flat();
+      console.log({ shipCoords, createdShipCoords });
+
+      for (let i = 0; i < shipCoords.length; i++) {
+        for (let j = 0; j < createdShipCoords.length; j++) {
+          console.log(shipCoords[i], createdShipCoords[j]);
+          if (
+            shipCoords[i][0] === createdShipCoords[j][0] &&
+            shipCoords[i][1] === createdShipCoords[j][1]
+          ) {
+            isShipOnAnotherShip = true;
+            break;
+          }
+        }
+      }
+      console.log(isShipOnAnotherShip);
+      return isShipOnAnotherShip;
+    },
+    getAShipsCoordinates(length, startCoord, axis) {
+      const shipCoords = [];
+      for (let i = 0; i <= length; i += 1) {
+        if (axis === 'X') {
+          shipCoords.push([startCoord[0] + i, startCoord[1]]);
+        } else {
+          shipCoords.push([startCoord[0], startCoord[1] + i]);
+        }
+      }
+      return shipCoords;
     },
     createGameboardHTML(name, height = 10, width = 10) {
       const gameboardParent = document.createElement('div');
@@ -90,8 +115,8 @@ export function Gameboard() {
             'gameboard-element',
             `gameboard-element-${name}`
           );
-          gameboardElement.setAttribute('data-X-coord', i);
-          gameboardElement.setAttribute('data-Y-coord', j);
+          gameboardElement.setAttribute('data-X-coord', j);
+          gameboardElement.setAttribute('data-Y-coord', i);
           if (i === 1) {
             gameboardElement.classList.add('gameboard-element-bottom-row');
           }
