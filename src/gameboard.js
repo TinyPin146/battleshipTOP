@@ -79,8 +79,16 @@ export function Gameboard() {
       for (let i = 0; i < shipCoords.length; i += 1) {
         for (let j = 0; j < createdShipCoords.length; j += 1) {
           if (
-            shipCoords[i][0] === createdShipCoords[j][0] &&
-            shipCoords[i][1] === createdShipCoords[j][1]
+            (shipCoords[i][0] === createdShipCoords[j][0] &&
+              shipCoords[i][1] === createdShipCoords[j][1]) ||
+            (shipCoords[i][0] === createdShipCoords[j][0] + 1 &&
+              shipCoords[i][1] === createdShipCoords[j][1]) ||
+            (shipCoords[i][0] === createdShipCoords[j][0] - 1 &&
+              shipCoords[i][1] === createdShipCoords[j][1]) ||
+            (shipCoords[i][0] === createdShipCoords[j][0] &&
+              shipCoords[i][1] === createdShipCoords[j][1] + 1) ||
+            (shipCoords[i][0] === createdShipCoords[j][0] &&
+              shipCoords[i][1] === createdShipCoords[j][1] - 1)
           ) {
             isShipOnAnotherShip = true;
             break;

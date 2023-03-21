@@ -19,6 +19,12 @@ export function addEventlistenersToPlayerGameboard(player, func) {
     });
 }
 
+export function removeEventlistenersToPlayerGameboard() {
+  const oldBody = document.body;
+  const newBody = oldBody.cloneNode(true);
+  oldBody.parentNode.replaceChild(newBody, oldBody);
+}
+
 export function showShipsOnGameboard(allShipCoords) {
   allShipCoords.forEach((shipCoords) => {
     shipCoords.forEach((coord) => {

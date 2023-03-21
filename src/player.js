@@ -114,6 +114,9 @@ export function Player(name, isComputer = false) {
       ) {
         console.log('Attacking ship if end is reached but not sunk');
         nextShot = this.shotIfEndOfShipButNotSunk();
+        if (this.isNextShotAlreadyDone(nextShot, enemyPlayer)) {
+          nextShot = this.shotIfLookingForSecondHit(enemyPlayer);
+        }
         const attackResponse = this.attackEnemy(nextShot, enemyPlayer);
         return { nextShot, attackResponse };
       }
@@ -208,7 +211,7 @@ export function Player(name, isComputer = false) {
         nextShot[1] < 1 ||
         nextShot[1] > 10
       ) {
-        nextShot = this.shotIfLookingForSecondHit();
+        nextShot = this.shotIfLookingForSecondHit(enemyPlayer);
       }
       return nextShot;
     },
@@ -217,6 +220,10 @@ export function Player(name, isComputer = false) {
       let nextShot;
       if (this.firstHitCoords === null)
         this.firstHitCoords = this.lastShotCoords;
+      if (this.possibleShotsIfLastHit.length === 0) {
+        nextShot = this.randomShot();
+        return nextShot;
+      }
       nextShot = this.possibleShotsIfLastHit.splice(
         Math.floor(Math.random() * this.possibleShotsIfLastHit.length),
         1

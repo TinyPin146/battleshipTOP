@@ -6,6 +6,7 @@ import {
   showShipsOnGameboard,
   hideShipsOnGameboard,
   mutatePlayerGameboardAfterAttack,
+  removeEventlistenersToPlayerGameboard,
 } from './index.js';
 
 let player1 = null;
@@ -25,6 +26,9 @@ export function setUpPlayers(Player1, Player2, isPlayer2Computer) {
   const player1Gameboard = player1.gameboard.createGameboardHTML(player1.name);
   addGameboardToDOMForPlayer(player1Gameboard);
   player1.placeShipsRandomly();
+  // for (let i = 1; i <= 5; i += 1) {
+  //   player1.gameboard.placeShip(5, player1.name, 'random', [i, 4], 'Y');
+  // }
   showShipsOnGameboard(player1.gameboard.getAllShipCoords());
 
   const player2Gameboard = player2.gameboard.createGameboardHTML(player2.name);
@@ -32,12 +36,10 @@ export function setUpPlayers(Player1, Player2, isPlayer2Computer) {
   player2.placeShipsRandomly();
 
   gameLoop();
-  console.log({ player1, player2 });
 }
 
 function gameLoop() {
   takeTurns();
-
   addEventlistenersToPlayerGameboard(player2, humanShot);
 }
 
@@ -48,6 +50,17 @@ function takeTurns() {
   } else {
     player1.isMyTurn = !player1.isMyTurn;
     player2.isMyTurn = !player2.isMyTurn;
+  }
+}
+
+function checkIfGameEnded() {
+  if (player1.gameboard.areAllShipsSunk()) {
+    console.log(`${player2.name} won!`);
+    removeEventlistenersToPlayerGameboard(player2, humanShot);
+  }
+  if (player2.gameboard.areAllShipsSunk()) {
+    console.log(`${player1.name} won!`);
+    removeEventlistenersToPlayerGameboard(player2, humanShot);
   }
 }
 
@@ -64,6 +77,7 @@ function humanShot(e, enemyPlayer) {
     return;
   }
   mutatePlayerGameboardAfterAttack(enemyPlayer, shot, attackResult);
+  checkIfGameEnded();
   takeTurns();
   setTimeout(() => {
     computerShot();
@@ -80,5 +94,6 @@ async function computerShot() {
     computerShotData.nextShot,
     computerShotData.attackResponse
   );
+  checkIfGameEnded();
   takeTurns();
 }
