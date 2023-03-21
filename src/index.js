@@ -3,7 +3,6 @@ import { setUpPlayers } from './gameLoop.js';
 const player1NameInput = document.querySelector('#player1');
 const player2NameInput = document.querySelector('#player2');
 const startGameWithAIBtn = document.querySelector('.start-game-AI-btn');
-const startGameWithPlayerBtn = document.querySelector('.start-game-player-btn');
 
 export function addGameboardToDOMForPlayer(gameboard) {
   document.querySelector('main').insertAdjacentElement('beforeend', gameboard);

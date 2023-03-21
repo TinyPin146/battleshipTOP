@@ -76,3 +76,14 @@ button:active {
 .hidden {
     display: none;
 }
+
+@media only screen and (max-width: 480px) {
+    .center {
+      flex-direction: column;
+    }
+
+    .gameboard-element {
+        width: 30px;
+        height: 30px;
+    }
+  }
