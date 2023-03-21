@@ -15,6 +15,7 @@ export function Player(name, isComputer = false) {
 
     attackEnemy(attackCoords, enemyPlayer) {
       const attackResponse = enemyPlayer.gameboard.receiveAttack(attackCoords);
+      if (attackResponse === null) return null;
       if (attackResponse.isHit) {
         this.didLastShotHit = true;
       } else {
@@ -104,6 +105,7 @@ export function Player(name, isComputer = false) {
     computerShot(enemyPlayer) {
       if (!this.isComputer) return;
       let nextShot;
+      console.log(this);
 
       if (
         this.hitAxis !== null &&
@@ -112,8 +114,8 @@ export function Player(name, isComputer = false) {
       ) {
         console.log('Attacking ship if end is reached but not sunk');
         nextShot = this.shotIfEndOfShipButNotSunk();
-        this.attackEnemy(nextShot, enemyPlayer);
-        return nextShot;
+        const attackResponse = this.attackEnemy(nextShot, enemyPlayer);
+        return { nextShot, attackResponse };
       }
 
       if (
@@ -122,10 +124,9 @@ export function Player(name, isComputer = false) {
         this.didLastShotHit
       ) {
         console.log('Attacking ship on axis and direction');
-        nextShot = this.shotIfShipIsHitTwice();
-        console.log({ nextShot });
-        this.attackEnemy(nextShot, enemyPlayer);
-        return nextShot;
+        nextShot = this.shotIfShipIsHitTwice(enemyPlayer);
+        const attackResponse = this.attackEnemy(nextShot, enemyPlayer);
+        return { nextShot, attackResponse };
       }
 
       if (this.didLastShotHit || this.possibleShotsIfLastHit !== null) {
@@ -136,13 +137,16 @@ export function Player(name, isComputer = false) {
             [this.lastShotCoords[0] - 1, this.lastShotCoords[1]],
             [this.lastShotCoords[0], this.lastShotCoords[1] + 1],
             [this.lastShotCoords[0], this.lastShotCoords[1] - 1],
-          ];
+          ].filter(
+            (value) =>
+              value[0] > 0 && value[0] < 11 && value[1] > 0 && value[1] < 11
+          );
         }
 
         nextShot = this.shotIfLookingForSecondHit(enemyPlayer);
-        this.attackEnemy(nextShot, enemyPlayer);
-        this.mutatePlayerObjectOnHit();
-        return nextShot;
+        const attackResponse = this.attackEnemy(nextShot, enemyPlayer);
+        if (attackResponse.isHit) this.mutatePlayerObjectOnHit();
+        return { nextShot, attackResponse };
       }
 
       // * No hit, no ship in sinking, random shot
@@ -150,8 +154,8 @@ export function Player(name, isComputer = false) {
         console.log('RANDOM SHOT');
 
         nextShot = this.randomShot(enemyPlayer);
-        this.attackEnemy(nextShot, enemyPlayer);
-        return nextShot;
+        const attackResponse = this.attackEnemy(nextShot, enemyPlayer);
+        return { nextShot, attackResponse };
       }
     },
 
@@ -180,7 +184,7 @@ export function Player(name, isComputer = false) {
       return nextShot;
     },
 
-    shotIfShipIsHitTwice() {
+    shotIfShipIsHitTwice(enemyPlayer) {
       let nextShot;
       if (this.hitAxis === 'X') {
         if (this.hitDirection === 'positive') {
@@ -195,7 +199,17 @@ export function Player(name, isComputer = false) {
           nextShot = [this.lastShotCoords[0], this.lastShotCoords[1] - 1];
         }
       }
-      console.log({ shotIfShipIsHitTwice: nextShot });
+      if (this.isNextShotAlreadyDone(nextShot, enemyPlayer)) {
+        nextShot = this.shotIfEndOfShipButNotSunk();
+      }
+      if (
+        nextShot[0] < 1 ||
+        nextShot[0] > 10 ||
+        nextShot[1] < 1 ||
+        nextShot[1] > 10
+      ) {
+        nextShot = this.shotIfLookingForSecondHit();
+      }
       return nextShot;
     },
 
@@ -217,7 +231,6 @@ export function Player(name, isComputer = false) {
     },
 
     randomShot(enemyPlayer) {
-      console.log('RANDOM');
       let nextShot = this.calculateNextShotCoords();
 
       while (this.isNextShotAlreadyDone(nextShot, enemyPlayer)) {
@@ -235,6 +248,7 @@ export function Player(name, isComputer = false) {
     },
 
     mutatePlayerObjectOnHit() {
+      console.log('MUTATING OBJECT');
       if (this.didLastShotHit) {
         const hitDirData = [
           this.firstHitCoords[0] - this.lastShotCoords[0],

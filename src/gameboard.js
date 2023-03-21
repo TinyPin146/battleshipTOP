@@ -15,6 +15,8 @@ export function Gameboard() {
       this.ships.push(new Ship(length, team, type, coordinates, axis));
     },
     receiveAttack(attackCoords) {
+      if (this.determineIfArrayIsInArrayOfArrays(attackCoords, this.missedHits))
+        return null;
       let isHit = false;
       let didSink = null;
       this.ships.forEach((ship) => {
@@ -73,11 +75,9 @@ export function Gameboard() {
       let isShipOnAnotherShip = false;
       const shipCoords = this.getAShipsCoordinates(length, startCoord, axis);
       const createdShipCoords = this.getAllShipCoords().flat();
-      console.log({ shipCoords, createdShipCoords });
 
-      for (let i = 0; i < shipCoords.length; i++) {
-        for (let j = 0; j < createdShipCoords.length; j++) {
-          console.log(shipCoords[i], createdShipCoords[j]);
+      for (let i = 0; i < shipCoords.length; i += 1) {
+        for (let j = 0; j < createdShipCoords.length; j += 1) {
           if (
             shipCoords[i][0] === createdShipCoords[j][0] &&
             shipCoords[i][1] === createdShipCoords[j][1]
@@ -87,7 +87,6 @@ export function Gameboard() {
           }
         }
       }
-      console.log(isShipOnAnotherShip);
       return isShipOnAnotherShip;
     },
     getAShipsCoordinates(length, startCoord, axis) {
@@ -100,6 +99,14 @@ export function Gameboard() {
         }
       }
       return shipCoords;
+    },
+    determineIfArrayIsInArrayOfArrays(inputArr, arr) {
+      let inputArrIsInArr = false;
+      arr.forEach((value) => {
+        if (value[0] === inputArr[0] && value[1] === inputArr[1])
+          inputArrIsInArr = !inputArrIsInArr;
+      });
+      return inputArrIsInArr;
     },
     createGameboardHTML(name, height = 10, width = 10) {
       const gameboardParent = document.createElement('div');

@@ -9,15 +9,12 @@ export function addGameboardToDOMForPlayer(gameboard) {
   document.querySelector('main').insertAdjacentElement('beforeend', gameboard);
 }
 
-export function addEventlistenersToPlayerGameboard(player) {
+export function addEventlistenersToPlayerGameboard(player, func) {
   document
-    .querySelectorAll(`.gameboard-element-${player}`)
+    .querySelectorAll(`.gameboard-element-${player.name}`)
     .forEach((element) => {
       element.addEventListener('click', (e) => {
-        console.log([
-          Number(e.currentTarget.dataset.xCoord),
-          Number(e.currentTarget.dataset.yCoord),
-        ]);
+        func(e, player);
       });
     });
 }
@@ -42,6 +39,19 @@ export function hideShipsOnGameboard(allShipCoords) {
       shipElementGrid.classList.add('ship-hidden');
     });
   });
+}
+
+export function mutatePlayerGameboardAfterAttack(player, shot, attackResult) {
+  const gameboard = document.querySelector(`.gameboard-parent-${player.name}`);
+  const attackedGridElement = gameboard.querySelector(
+    `[data-x-coord="${shot[0]}"][data-y-coord="${shot[1]}"]`
+  );
+
+  if (attackResult.isHit) {
+    attackedGridElement.textContent = 'X';
+  } else {
+    attackedGridElement.style.background = 'red';
+  }
 }
 
 export function addHiddenClassToElement(element) {

@@ -5,6 +5,7 @@ import {
   addEventlistenersToPlayerGameboard,
   showShipsOnGameboard,
   hideShipsOnGameboard,
+  mutatePlayerGameboardAfterAttack,
 } from './index.js';
 
 let player1 = null;
@@ -23,18 +24,21 @@ export function setUpPlayers(Player1, Player2, isPlayer2Computer) {
 
   const player1Gameboard = player1.gameboard.createGameboardHTML(player1.name);
   addGameboardToDOMForPlayer(player1Gameboard);
-  addEventlistenersToPlayerGameboard(player1.name);
   player1.placeShipsRandomly();
   showShipsOnGameboard(player1.gameboard.getAllShipCoords());
 
   const player2Gameboard = player2.gameboard.createGameboardHTML(player2.name);
   addGameboardToDOMForPlayer(player2Gameboard);
-  addEventlistenersToPlayerGameboard(player2.name);
-  // player2.placeShipsRandomly();
+  player2.placeShipsRandomly();
 
+  gameLoop();
+  console.log({ player1, player2 });
+}
+
+function gameLoop() {
   takeTurns();
 
-  console.log({ player1: player1.gameboard.ships, player2 });
+  addEventlistenersToPlayerGameboard(player2, humanShot);
 }
 
 function takeTurns() {
@@ -45,4 +49,36 @@ function takeTurns() {
     player1.isMyTurn = !player1.isMyTurn;
     player2.isMyTurn = !player2.isMyTurn;
   }
+}
+
+function humanShot(e, enemyPlayer) {
+  const player = enemyPlayer === player1 ? player2 : player1;
+  if (!player.isMyTurn) return;
+  const shot = [
+    Number(e.currentTarget.dataset.xCoord),
+    Number(e.currentTarget.dataset.yCoord),
+  ];
+  const attackResult = player.attackEnemy(shot, enemyPlayer);
+  if (attackResult === null) {
+    console.log('Shot already taken');
+    return;
+  }
+  mutatePlayerGameboardAfterAttack(enemyPlayer, shot, attackResult);
+  takeTurns();
+  setTimeout(() => {
+    computerShot();
+  }, Math.floor(Math.random() * 1000));
+}
+
+async function computerShot() {
+  if (!player2.isComputer || !player2.isMyTurn) return;
+
+  const computerShotData = player2.computerShot(player1);
+  console.log({ compShot: computerShotData.nextShot });
+  mutatePlayerGameboardAfterAttack(
+    player1,
+    computerShotData.nextShot,
+    computerShotData.attackResponse
+  );
+  takeTurns();
 }
