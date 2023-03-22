@@ -1,3 +1,4 @@
+import { trackSunkenShip } from './index.js';
 import { Ship } from './ships.js';
 
 export function Gameboard() {
@@ -19,6 +20,7 @@ export function Gameboard() {
         return null;
       let isHit = false;
       let didSink = null;
+      let instShip = null;
       this.ships.forEach((ship) => {
         const shipCoords = this.getShipCoords(ship);
         for (let i = 0; i < shipCoords.length; i += 1) {
@@ -29,13 +31,16 @@ export function Gameboard() {
             ship.hit();
             isHit = true;
             didSink = ship.isSunk();
+            instShip = ship;
             break;
           }
         }
       });
       this.missedHits.push(attackCoords);
+      if (didSink) trackSunkenShip(instShip);
       return { isHit, didSink };
     },
+
     getAllShipCoords() {
       const allShipsCoords = [];
       this.ships.forEach((ship) => {

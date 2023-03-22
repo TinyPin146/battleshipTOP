@@ -9,6 +9,7 @@ import {
   removeEventlistenersToPlayerGameboard,
   addShipTrackerToDOMForPlayer,
   createPlayerAreaInDOM,
+  showEndOfGameScreen,
 } from './index.js';
 
 let player1 = null;
@@ -44,7 +45,7 @@ export function setUpPlayers(Player1, Player2, isPlayer2Computer) {
 
   createPlayerAreaInDOM(player2);
   addGameboardToDOMForPlayer(player2, player2Gameboard);
-  addShipTrackerToDOMForPlayer(player2, player1ShipTrackerHTML);
+  addShipTrackerToDOMForPlayer(player2, player2ShipTrackerHTML);
   player2.placeShipsRandomly();
 
   gameLoop();
@@ -56,6 +57,7 @@ function gameLoop() {
 }
 
 function takeTurns() {
+  if (!player1 || !player2) return;
   if (player1.isMyTurn === null && player2.isMyTurn === null) {
     player1.isMyTurn = true;
     player2.isMyTurn = false;
@@ -67,12 +69,19 @@ function takeTurns() {
 
 function checkIfGameEnded() {
   if (player1.gameboard.areAllShipsSunk()) {
-    console.log(`${player2.name} won!`);
     removeEventlistenersToPlayerGameboard(player2, humanShot);
+    showEndOfGameScreen(player2.name);
   }
   if (player2.gameboard.areAllShipsSunk()) {
-    console.log(`${player1.name} won!`);
     removeEventlistenersToPlayerGameboard(player2, humanShot);
+    showEndOfGameScreen(player1.name);
+  }
+  if (
+    player1.gameboard.areAllShipsSunk() ||
+    player2.gameboard.areAllShipsSunk()
+  ) {
+    player1 = null;
+    player2 = null;
   }
 }
 
@@ -93,11 +102,11 @@ function humanShot(e, enemyPlayer) {
   takeTurns();
   setTimeout(() => {
     computerShot();
-  }, Math.floor(Math.random() * 1000));
+  }, Math.floor(Math.random() * 350));
 }
 
 async function computerShot() {
-  if (!player2.isComputer || !player2.isMyTurn) return;
+  if (!player2 || !player2.isComputer || !player2.isMyTurn) return;
 
   const computerShotData = player2.computerShot(player1);
   console.log({ compShot: computerShotData.nextShot });

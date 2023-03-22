@@ -24,6 +24,10 @@ body {
     background: none;
 }
 
+.ship-sunken {
+    text-decoration: line-through;
+}
+
 h1 {
     font-size: 3rem;
 }
@@ -35,6 +39,8 @@ button {
     border: 3px solid white;
     border-radius: 10px;
     padding: 1.5em;
+    font-size: 20px;
+    font-weight: 600;
 
     transition: all .2s ease-in-out;
 }
@@ -48,10 +54,22 @@ button:active {
     color: white;
 }
 
-.gamestart-form button {
-    font-size: 20px;
-    font-weight: 600;
+.end-game-modal {
+    position: absolute;
+    inset: 0 0 0 0;
+    background: rgba(0, 0, 0, 0.7);
+}
 
+.end-game-menu {
+    position: relative;
+    top: 25%;
+    left: 25%;
+
+    width: 50%;
+    height: 50%;
+
+
+    background-color: black;
 }
 
 .gameboard-parent {
