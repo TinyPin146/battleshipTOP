@@ -32,20 +32,20 @@ export function setUpPlayers(Player1, Player2, isPlayer2Computer) {
   const player1ShipTrackerHTML = player1.gameboard.createShipTrackingHTML(
     player1.name
   );
-  createPlayerAreaInDOM(player1);
-  addGameboardToDOMForPlayer(player1, player1GameboardHTML);
-  addShipTrackerToDOMForPlayer(player1, player1ShipTrackerHTML);
-  player1.placeShipsRandomly();
-  showShipsOnGameboard(player1.gameboard.getAllShipCoords());
-
   const player2Gameboard = player2.gameboard.createGameboardHTML(player2.name);
   const player2ShipTrackerHTML = player2.gameboard.createShipTrackingHTML(
     player2.name
   );
 
+  createPlayerAreaInDOM(player1);
+  addGameboardToDOMForPlayer(player1, player1GameboardHTML);
+  addShipTrackerToDOMForPlayer(player1, player1ShipTrackerHTML);
+
   createPlayerAreaInDOM(player2);
   addGameboardToDOMForPlayer(player2, player2Gameboard);
   addShipTrackerToDOMForPlayer(player2, player2ShipTrackerHTML);
+
+  player1.placeShipsRandomly();
   player2.placeShipsRandomly();
 
   gameLoop();
@@ -53,7 +53,12 @@ export function setUpPlayers(Player1, Player2, isPlayer2Computer) {
 
 function gameLoop() {
   takeTurns();
-  addEventlistenersToPlayerGameboard(player2, humanShot);
+  if (player2.isComputer) {
+    addEventlistenersToPlayerGameboard(player2, humanShot);
+  } else {
+    addEventlistenersToPlayerGameboard(player2, humanShot);
+    addEventlistenersToPlayerGameboard(player1, humanShot);
+  }
 }
 
 function takeTurns() {
@@ -64,6 +69,22 @@ function takeTurns() {
   } else {
     player1.isMyTurn = !player1.isMyTurn;
     player2.isMyTurn = !player2.isMyTurn;
+  }
+  if (!player1.isComputer && !player2.isComputer) {
+    if (player1.isMyTurn) {
+      console.log('Player 1 ship hiding');
+      hideShipsOnGameboard(player2);
+      setTimeout(() => {
+        showShipsOnGameboard(player1);
+      }, 2000);
+    }
+    if (player2.isMyTurn) {
+      console.log('Player 2 ship hiding');
+      hideShipsOnGameboard(player1);
+      setTimeout(() => {
+        showShipsOnGameboard(player2);
+      }, 2000);
+    }
   }
 }
 
@@ -100,9 +121,11 @@ function humanShot(e, enemyPlayer) {
   mutatePlayerGameboardAfterAttack(enemyPlayer, shot, attackResult);
   checkIfGameEnded();
   takeTurns();
-  setTimeout(() => {
-    computerShot();
-  }, Math.floor(Math.random() * 350));
+  if (player2.isComputer) {
+    setTimeout(() => {
+      computerShot();
+    }, Math.floor(Math.random() * 350));
+  }
 }
 
 async function computerShot() {

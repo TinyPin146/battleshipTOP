@@ -3,6 +3,7 @@ import { setUpPlayers } from './gameLoop.js';
 const player1NameInput = document.querySelector('#player1');
 const player2NameInput = document.querySelector('#player2');
 const startGameWithAIBtn = document.querySelector('.start-game-AI-btn');
+const startGameWithPlayerBtn = document.querySelector('.start-game-player-btn');
 const PLAYER_AREA_CLASS_NAME = 'player-area-';
 
 export function createPlayerAreaInDOM(player) {
@@ -49,23 +50,32 @@ export function removeEventlistenersToPlayerGameboard() {
   oldBody.parentNode.replaceChild(newBody, oldBody);
 }
 
-export function showShipsOnGameboard(allShipCoords) {
-  allShipCoords.forEach((shipCoords) => {
+export function showShipsOnGameboard(player) {
+  const playerGameArea = document.querySelector(
+    `.${PLAYER_AREA_CLASS_NAME}${player.name}`
+  );
+  player.gameboard.getAllShipCoords().forEach((shipCoords) => {
     shipCoords.forEach((coord) => {
-      const shipElementGrid = document.querySelector(
+      const shipElementGrid = playerGameArea.querySelector(
         `[data-x-coord="${coord[0]}"][data-y-coord="${coord[1]}"]`
       );
+      shipElementGrid.classList.remove('ship-hidden');
       shipElementGrid.classList.add('ship-shown');
     });
   });
 }
 
-export function hideShipsOnGameboard(allShipCoords) {
-  allShipCoords.forEach((shipCoords) => {
+export function hideShipsOnGameboard(player) {
+  const playerGameArea = document.querySelector(
+    `.${PLAYER_AREA_CLASS_NAME}${player.name}`
+  );
+
+  player.gameboard.getAllShipCoords().forEach((shipCoords) => {
     shipCoords.forEach((coord) => {
-      const shipElementGrid = document.querySelector(
+      const shipElementGrid = playerGameArea.querySelector(
         `[data-x-coord="${coord[0]}"][data-y-coord="${coord[1]}"]`
       );
+      shipElementGrid.classList.remove('ship-shown');
       shipElementGrid.classList.add('ship-hidden');
     });
   });
@@ -131,6 +141,11 @@ export function addHiddenClassToElement(element) {
 }
 
 startGameWithAIBtn.addEventListener('click', () => {
+  const isOpponentAI = !player2NameInput.value;
+  setUpPlayers(player1NameInput.value, player2NameInput.value, isOpponentAI);
+});
+
+startGameWithPlayerBtn.addEventListener('click', () => {
   const isOpponentAI = !player2NameInput.value;
   setUpPlayers(player1NameInput.value, player2NameInput.value, isOpponentAI);
 });
