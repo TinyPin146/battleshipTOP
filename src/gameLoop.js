@@ -7,6 +7,8 @@ import {
   hideShipsOnGameboard,
   mutatePlayerGameboardAfterAttack,
   removeEventlistenersToPlayerGameboard,
+  addShipTrackerToDOMForPlayer,
+  createPlayerAreaInDOM,
 } from './index.js';
 
 let player1 = null;
@@ -23,16 +25,26 @@ export function setUpPlayers(Player1, Player2, isPlayer2Computer) {
   player1 = new Player(Player1);
   player2 = new Player(player2Name, isPlayer2Computer);
 
-  const player1Gameboard = player1.gameboard.createGameboardHTML(player1.name);
-  addGameboardToDOMForPlayer(player1Gameboard);
+  const player1GameboardHTML = player1.gameboard.createGameboardHTML(
+    player1.name
+  );
+  const player1ShipTrackerHTML = player1.gameboard.createShipTrackingHTML(
+    player1.name
+  );
+  createPlayerAreaInDOM(player1);
+  addGameboardToDOMForPlayer(player1, player1GameboardHTML);
+  addShipTrackerToDOMForPlayer(player1, player1ShipTrackerHTML);
   player1.placeShipsRandomly();
-  // for (let i = 1; i <= 5; i += 1) {
-  //   player1.gameboard.placeShip(5, player1.name, 'random', [i, 4], 'Y');
-  // }
   showShipsOnGameboard(player1.gameboard.getAllShipCoords());
 
   const player2Gameboard = player2.gameboard.createGameboardHTML(player2.name);
-  addGameboardToDOMForPlayer(player2Gameboard);
+  const player2ShipTrackerHTML = player2.gameboard.createShipTrackingHTML(
+    player2.name
+  );
+
+  createPlayerAreaInDOM(player2);
+  addGameboardToDOMForPlayer(player2, player2Gameboard);
+  addShipTrackerToDOMForPlayer(player2, player1ShipTrackerHTML);
   player2.placeShipsRandomly();
 
   gameLoop();

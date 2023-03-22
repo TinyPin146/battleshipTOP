@@ -3,9 +3,28 @@ import { setUpPlayers } from './gameLoop.js';
 const player1NameInput = document.querySelector('#player1');
 const player2NameInput = document.querySelector('#player2');
 const startGameWithAIBtn = document.querySelector('.start-game-AI-btn');
+const PLAYER_AREA_CLASS_NAME = 'player-area-';
 
-export function addGameboardToDOMForPlayer(gameboard) {
-  document.querySelector('main').insertAdjacentElement('beforeend', gameboard);
+export function createPlayerAreaInDOM(player) {
+  const playerAreaHTMLElement = document.createElement('div');
+  playerAreaHTMLElement.classList.add(
+    `${PLAYER_AREA_CLASS_NAME}${player.name}`
+  );
+  document
+    .querySelector('main')
+    .insertAdjacentElement('beforeend', playerAreaHTMLElement);
+}
+
+export function addGameboardToDOMForPlayer(player, gameboard) {
+  document
+    .querySelector(`.${PLAYER_AREA_CLASS_NAME}${player.name}`)
+    .insertAdjacentElement('beforeend', gameboard);
+}
+
+export function addShipTrackerToDOMForPlayer(player, tracker) {
+  document
+    .querySelector(`.${PLAYER_AREA_CLASS_NAME}${player.name}`)
+    .insertAdjacentHTML('beforeend', tracker);
 }
 
 export function addEventlistenersToPlayerGameboard(player, func) {

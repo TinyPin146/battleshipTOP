@@ -143,5 +143,17 @@ export function Gameboard() {
       }
       return gameboardParent;
     },
+
+    createShipTrackingHTML(name) {
+      return `
+        <ul class="ship-tracking ship-tracking-${name}">
+          <li class="ship carrier carrier-${name}">Carrier</li>
+          <li class="ship battleship battleship-${name}">Battleship</li>
+          <li class="ship cruiser cruiser-${name}">Cruiser</li>
+          <li class="ship submarine submarine-${name}">Submarine</li>
+          <li class="ship destroyer destroyer-${name}">Destroyer</li>
+        </ul>
+      `;
+    },
   };
 }
