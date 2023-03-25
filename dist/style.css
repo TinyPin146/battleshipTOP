@@ -23,9 +23,16 @@ body {
 .ship-hidden {
     background: none;
 }
-
 .ship-sunken {
     text-decoration: line-through;
+}
+.ship-block {
+    display: inline-block;
+    height: 40px;
+    width: 40px;
+}
+.draggable {
+    display: inline-block;
 }
 
 h1 {
@@ -93,6 +100,9 @@ button:active {
 
 .hidden {
     display: none;
+}
+.hold {
+    border: 2px solid white;
 }
 
 @media only screen and (max-width: 800px) {

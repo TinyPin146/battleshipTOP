@@ -7,14 +7,22 @@ const startGameWithPlayerBtn = document.querySelector('.start-game-player-btn');
 const PLAYER_AREA_CLASS_NAME = 'player-area-';
 
 export function createPlayerAreaInDOM(player) {
+  const main = document.querySelector('main');
   const playerAreaHTMLElement = document.createElement('div');
   playerAreaHTMLElement.classList.add(
     `${PLAYER_AREA_CLASS_NAME}${player.name}`,
     'player-area'
   );
-  document
-    .querySelector('main')
-    .insertAdjacentElement('beforeend', playerAreaHTMLElement);
+  const axisBtn = document.createElement('button');
+  axisBtn.setAttribute('data-axis', 'X');
+  axisBtn.classList.add('axis-selector-btn', 'button', 'center');
+  axisBtn.textContent = 'Axis: X';
+
+  if (!document.querySelector('.axis-selector-btn')) {
+    main.insertAdjacentElement('afterbegin', axisBtn);
+  }
+  axisBtn.addEventListener('click', setAxis);
+  main.insertAdjacentElement('beforeend', playerAreaHTMLElement);
 }
 
 export function addGameboardToDOMForPlayer(player, gameboard) {
@@ -24,13 +32,108 @@ export function addGameboardToDOMForPlayer(player, gameboard) {
 }
 
 export function addShipTrackerToDOMForPlayer(player, tracker) {
-  document
-    .querySelector(`.${PLAYER_AREA_CLASS_NAME}${player.name}`)
-    .insertAdjacentHTML('beforeend', tracker);
+  const playerArea = document.querySelector(
+    `.${PLAYER_AREA_CLASS_NAME}${player.name}`
+  );
+  playerArea.insertAdjacentHTML('beforeend', tracker);
+
+  const gameboardGrids = playerArea.querySelectorAll('.gameboard-element');
+  const shipDraggables = playerArea.querySelectorAll('.draggable');
+
+  shipDraggables.forEach((draggable) => {
+    draggable.addEventListener('dragstart', shipDragStart);
+  });
+  shipDraggables.forEach((draggable) => {
+    draggable.addEventListener('dragend', shipDragEnd);
+  });
+
+  gameboardGrids.forEach((grid) => {
+    grid.addEventListener('dragover', (e) => {
+      e.preventDefault();
+    });
+  });
+  gameboardGrids.forEach((grid) => {
+    grid.addEventListener('drop', (e) => {
+      dropOnGrid(e, player);
+    });
+  });
+}
+
+function shipDragStart(e) {
+  // !
+  this.classList.toggle('hold');
+  requestAnimationFrame(() => {
+    this.classList.toggle('hidden');
+  });
+  console.log({ data: this.dataset });
+  e.dataTransfer.setData('shipLength', this.dataset.length);
+  e.dataTransfer.setData('shipType', this.dataset.shiptype);
+}
+
+function shipDragEnd(e) {
+  // !
+  console.log('Drag end');
+  this.classList.toggle('hold');
+  if (!this.classList.contains('hidden')) {
+    this.classList.toggle('hidden');
+  }
+}
+
+function dropOnGrid(e, player) {
+  console.log('Drag drop');
+
+  const shipLength = Number(e.dataTransfer.getData('shipLength'));
+  const shiptType = e.dataTransfer.getData('shipType');
+  const { axis } = document.querySelector('.axis-selector-btn').dataset;
+  const shipListItemElem = document.querySelector(
+    `.${shiptType.toLowerCase()}-${player.name}`
+  );
+  let xCoord = Number(e.currentTarget.dataset.xCoord);
+  let yCoord = Number(e.currentTarget.dataset.yCoord);
+
+  if (xCoord + shipLength > 10) {
+    xCoord = 10 - shipLength + 1;
+  }
+  if (yCoord + shipLength > 10) {
+    yCoord = 10 - shipLength + 1;
+  }
+
+  if (
+    player.gameboard.determineIfShipIsOnAnotherShip(
+      shipLength,
+      [xCoord, yCoord],
+      axis
+    )
+  )
+    return;
+
+  player.gameboard.placeShip(
+    shipLength,
+    player.name,
+    shiptType,
+    [xCoord, yCoord],
+    axis
+  );
+  showShipsOnGameboard(player);
+  console.log(shipListItemElem.querySelector('div'));
+  shipListItemElem.querySelector('div').classList.add('hidden');
+}
+
+function setAxis() {
+  const { axis } = this.dataset;
+
+  if (axis === 'X') {
+    this.textContent = 'Axis: Y';
+    this.dataset.axis = 'Y';
+  }
+
+  if (axis === 'Y') {
+    this.textContent = 'Axis: X';
+    this.dataset.axis = 'X';
+  }
 }
 
 export function trackSunkenShip(ship) {
-  console.log(ship.id);
   document.querySelector(`.${ship.id}`).classList.add('ship-sunken');
 }
 

@@ -45,7 +45,6 @@ export function setUpPlayers(Player1, Player2, isPlayer2Computer) {
   addGameboardToDOMForPlayer(player2, player2Gameboard);
   addShipTrackerToDOMForPlayer(player2, player2ShipTrackerHTML);
 
-  player1.placeShipsRandomly();
   player2.placeShipsRandomly();
 
   gameLoop();
@@ -85,6 +84,9 @@ function takeTurns() {
         showShipsOnGameboard(player2);
       }, 2000);
     }
+  }
+  if (player2.isComputer) {
+    showShipsOnGameboard(player1);
   }
 }
 

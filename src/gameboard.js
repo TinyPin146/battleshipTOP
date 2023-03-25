@@ -152,11 +152,43 @@ export function Gameboard() {
     createShipTrackingHTML(name) {
       return `
         <ul class="ship-tracking ship-tracking-${name}">
-          <li class="ship carrier carrier-${name}">Carrier</li>
-          <li class="ship battleship battleship-${name}">Battleship</li>
-          <li class="ship cruiser cruiser-${name}">Cruiser</li>
-          <li class="ship submarine submarine-${name}">Submarine</li>
-          <li class="ship destroyer destroyer-${name}">Destroyer</li>
+          <li class="ship carrier carrier-${name}">Carrier     
+            <div class="draggable carrier-draggable" data-length="5" data-shipType="Carrier" draggable="true">
+              <div class="ship-block ship-shown"></div>
+              <div class="ship-block ship-shown"></div>
+              <div class="ship-block ship-shown"></div>
+              <div class="ship-block ship-shown"></div>
+              <div class="ship-block ship-shown"></div>
+            </div>
+          </li>
+          <li class="ship battleship battleship-${name}">Battleship
+            <div class="draggable battleship-draggable" data-length="4" data-shipType="Battleship" draggable="true">
+              <div class="ship-block ship-shown"></div>
+              <div class="ship-block ship-shown"></div>
+              <div class="ship-block ship-shown"></div>
+              <div class="ship-block ship-shown"></div>
+            </div>
+          </li>
+          <li class="ship cruiser cruiser-${name}">Cruiser
+            <div class="draggable cruiser-draggable" data-length="3" data-shipType="Cruiser" draggable="true">
+              <div class="ship-block ship-shown"></div>
+              <div class="ship-block ship-shown"></div>
+              <div class="ship-block ship-shown"></div>
+            </div>
+          </li>
+          <li class="ship submarine submarine-${name}">Submarine
+            <div class="draggable submarine-draggable" data-length="3" data-shipType="Submarine" draggable="true">
+              <div class="ship-block ship-shown"></div>
+              <div class="ship-block ship-shown"></div>
+              <div class="ship-block ship-shown"></div>
+            </div>
+          </li>
+          <li class="ship destroyer destroyer-${name}">Destroyer
+            <div class="draggable destroyer-draggable" data-length="2" data-shipType="Destroyer" draggable="true">
+              <div class="ship-block ship-shown"></div>
+              <div class="ship-block ship-shown"></div>
+            </div>
+          </li>
         </ul>
       `;
     },
