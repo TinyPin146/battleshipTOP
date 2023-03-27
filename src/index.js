@@ -1,4 +1,4 @@
-import { setUpPlayers } from './gameLoop.js';
+import { setUpPlayers, startGameLoop } from './gameLoop.js';
 
 const player1NameInput = document.querySelector('#player1');
 const player2NameInput = document.querySelector('#player2');
@@ -65,36 +65,33 @@ function shipDragStart(e) {
   requestAnimationFrame(() => {
     this.classList.toggle('hidden');
   });
-  console.log({ data: this.dataset });
   e.dataTransfer.setData('shipLength', this.dataset.length);
   e.dataTransfer.setData('shipType', this.dataset.shiptype);
+  e.dataTransfer.setData('shipElem', this);
 }
 
 function shipDragEnd(e) {
   // !
-  console.log('Drag end');
+  console.log(e);
   this.classList.toggle('hold');
-  if (!this.classList.contains('hidden')) {
-    this.classList.toggle('hidden');
-  }
+  this.classList.toggle('hidden');
 }
 
 function dropOnGrid(e, player) {
-  console.log('Drag drop');
-
   const shipLength = Number(e.dataTransfer.getData('shipLength'));
   const shiptType = e.dataTransfer.getData('shipType');
-  const { axis } = document.querySelector('.axis-selector-btn').dataset;
+  const axisBtn = document.querySelector('.axis-selector-btn');
+  const { axis } = axisBtn.dataset;
   const shipListItemElem = document.querySelector(
     `.${shiptType.toLowerCase()}-${player.name}`
   );
   let xCoord = Number(e.currentTarget.dataset.xCoord);
   let yCoord = Number(e.currentTarget.dataset.yCoord);
 
-  if (xCoord + shipLength > 10) {
+  if (axis === 'X' && xCoord + shipLength > 10) {
     xCoord = 10 - shipLength + 1;
   }
-  if (yCoord + shipLength > 10) {
+  if (axis === 'Y' && yCoord + shipLength > 10) {
     yCoord = 10 - shipLength + 1;
   }
 
@@ -117,6 +114,11 @@ function dropOnGrid(e, player) {
   showShipsOnGameboard(player);
   console.log(shipListItemElem.querySelector('div'));
   shipListItemElem.querySelector('div').classList.add('hidden');
+  const didGameStart = startGameLoop();
+
+  if (didGameStart) {
+    axisBtn.parentElement.removeChild(axisBtn);
+  }
 }
 
 function setAxis() {
