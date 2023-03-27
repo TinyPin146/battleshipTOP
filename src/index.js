@@ -111,9 +111,14 @@ function dropOnGrid(e, player) {
     [xCoord, yCoord],
     axis
   );
+
+  if (player.gameboard.checkIfPlayerHasTypeOfShip(shiptType)) {
+    setTimeout(() => {
+      shipListItemElem.querySelector('div').classList.add('hidden');
+    }, 0);
+  }
   showShipsOnGameboard(player);
   console.log(shipListItemElem.querySelector('div'));
-  shipListItemElem.querySelector('div').classList.add('hidden');
   const didGameStart = startGameLoop();
 
   if (didGameStart) {

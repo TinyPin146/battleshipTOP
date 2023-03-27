@@ -41,6 +41,14 @@ export function Gameboard() {
       return { isHit, didSink };
     },
 
+    checkIfPlayerHasTypeOfShip(type) {
+      const shipTypesOnBoard = this.ships.map((ship) => ship.type);
+      if (shipTypesOnBoard.includes(type)) {
+        return true;
+      }
+      return false;
+    },
+
     getAllShipCoords() {
       const allShipsCoords = [];
       this.ships.forEach((ship) => {
