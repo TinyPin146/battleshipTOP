@@ -64,7 +64,6 @@ export function addShipTrackerToDOMForPlayer(player, tracker) {
 }
 
 function shipDragStart(e) {
-  // !
   this.classList.toggle('hold');
   requestAnimationFrame(() => {
     this.classList.toggle('hidden');
@@ -75,8 +74,6 @@ function shipDragStart(e) {
 }
 
 function shipDragEnd(e) {
-  // !
-  console.log(e);
   this.classList.toggle('hold');
   this.classList.toggle('hidden');
 }
@@ -122,7 +119,6 @@ function dropOnGrid(e, player) {
     }, 0);
   }
   showShipsOnGameboard(player);
-  console.log(shipListItemElem.querySelector('div'));
   const didGameStart = startGameLoop();
 
   if (didGameStart) {

@@ -81,14 +81,12 @@ function takeTurns() {
   }
   if (!player1.isComputer && !player2.isComputer) {
     if (player1.isMyTurn) {
-      console.log('Player 1 ship hiding');
       hideShipsOnGameboard(player2);
       setTimeout(() => {
         showShipsOnGameboard(player1);
       }, 2000);
     }
     if (player2.isMyTurn) {
-      console.log('Player 2 ship hiding');
       hideShipsOnGameboard(player1);
       setTimeout(() => {
         showShipsOnGameboard(player2);
@@ -132,7 +130,6 @@ function humanShot(e, enemyPlayer) {
   ];
   const attackResult = player.attackEnemy(shot, enemyPlayer);
   if (attackResult === null) {
-    console.log('Shot already taken');
     return;
   }
   mutatePlayerGameboardAfterAttack(enemyPlayer, shot, attackResult);
@@ -149,7 +146,6 @@ async function computerShot() {
   if (!player2 || !player2.isComputer || !player2.isMyTurn) return;
 
   const computerShotData = player2.computerShot(player1);
-  console.log({ compShot: computerShotData.nextShot });
   mutatePlayerGameboardAfterAttack(
     player1,
     computerShotData.nextShot,
