@@ -10,6 +10,7 @@ import {
   addShipTrackerToDOMForPlayer,
   createPlayerAreaInDOM,
   showEndOfGameScreen,
+  updateNarrationArea,
 } from './index.js';
 
 let player1 = null;
@@ -97,6 +98,11 @@ function takeTurns() {
   if (player2.isComputer) {
     showShipsOnGameboard(player1);
   }
+
+  const playerHasTurn = player1.isMyTurn ? player1 : player2;
+  setTimeout(() => {
+    updateNarrationArea(`${playerHasTurn.name} is aiming...`);
+  }, 0);
 }
 
 function checkIfGameEnded() {
@@ -135,7 +141,7 @@ function humanShot(e, enemyPlayer) {
   if (player2.isComputer) {
     setTimeout(() => {
       computerShot();
-    }, Math.floor(Math.random() * 350));
+    }, Math.floor(Math.random() * 750));
   }
 }
 

@@ -19,7 +19,7 @@
         <div class="gamestart-form">
             <div class="playerinput">
                 <label for="player1">Player 1 name:</label>
-                <input type="text" name="player1" id="player1">
+                <input type="text" name="player1" id="player1" required minlength="3" maxlength="15">
             </div>
             <div class="playerinput">
                 <label for="player2">Player 2 name:</label>
@@ -32,12 +32,11 @@
             </div>
         </div>
     </main>
-    <div class="gameboard"></div>
     <div class="end-game-modal hidden">
-        <div class="end-game-menu center">
+        <div class="end-game-menu">
             <h2></h2>
             <button class="play-again-btn center">Play again</button>
-            <button class="play-again-with-other-players center">Play with different players</button>
+            <button class="play-again-with-other-players center">Play with other players</button>
         </div>
     </div>
 </body>

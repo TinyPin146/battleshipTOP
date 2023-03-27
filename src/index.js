@@ -13,6 +13,10 @@ export function createPlayerAreaInDOM(player) {
     `${PLAYER_AREA_CLASS_NAME}${player.name}`,
     'player-area'
   );
+  const playerId = document.createElement('h2');
+  playerId.textContent = `${player.name}`;
+  playerAreaHTMLElement.insertAdjacentElement('afterbegin', playerId);
+
   const axisBtn = document.createElement('button');
   axisBtn.setAttribute('data-axis', 'X');
   axisBtn.classList.add('axis-selector-btn', 'button', 'center');
@@ -122,8 +126,21 @@ function dropOnGrid(e, player) {
   const didGameStart = startGameLoop();
 
   if (didGameStart) {
+    const narrationArea = document.createElement('div');
+    narrationArea.classList.add('narration-area');
     axisBtn.parentElement.removeChild(axisBtn);
+    document
+      .querySelector('main')
+      .insertAdjacentElement('afterbegin', narrationArea);
   }
+}
+
+export function updateNarrationArea(text) {
+  const narrationArea = document.querySelector('.narration-area');
+  if (!narrationArea) return;
+
+  narrationArea.textContent = '';
+  narrationArea.textContent = text;
 }
 
 function setAxis() {
@@ -141,7 +158,9 @@ function setAxis() {
 }
 
 export function trackSunkenShip(ship) {
-  document.querySelector(`.${ship.id}`).classList.add('ship-sunken');
+  const sunkenShip = document.querySelector(`.${ship.id}`);
+  sunkenShip.classList.add('ship-sunken');
+  sunkenShip.style.color = 'red';
 }
 
 export function addEventlistenersToPlayerGameboard(player, func) {
@@ -244,6 +263,9 @@ function clearGameboards() {
   gameboards.forEach((gameboard) => {
     gameboard.parentElement.removeChild(gameboard);
   });
+
+  const narrationArea = document.querySelector('.narration-area');
+  narrationArea.parentElement.removeChild(narrationArea);
 }
 
 export function addHiddenClassToElement(element) {
